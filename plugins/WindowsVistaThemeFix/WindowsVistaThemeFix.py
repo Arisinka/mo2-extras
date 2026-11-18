@@ -1,7 +1,7 @@
 """Fix Vista-style command-link text on dark MO2 themes."""
 
 import mobase # pyright: ignore[reportMissingModuleSource]
-from PyQt6.QtCore import QEvent, QObject, QTimer
+from PyQt6.QtCore import QEvent, QObject
 from PyQt6.QtGui import QBrush, QPalette
 from PyQt6.QtWidgets import QApplication, QCommandLinkButton
 
@@ -19,7 +19,11 @@ class CommandLinkFilter(QObject):
         self.plugin = plugin
 
     def eventFilter(self, watched, event):
-        if event.type() == QEvent.Type.Show and isinstance(watched, QCommandLinkButton):
+        if isinstance(watched, QCommandLinkButton) and event.type() in (
+            QEvent.Type.Show,
+            QEvent.Type.StyleChange,
+            QEvent.Type.PaletteChange,
+        ):
             self.plugin.update_button(watched)
         return False
 
@@ -29,7 +33,6 @@ class WindowsVistaThemeFix(mobase.IPlugin):
         super().__init__()
         self.application = None
         self.event_filter = None
-        self.timer = None
 
     def init(self, organizer):
         self.application = QApplication.instance()
@@ -37,9 +40,6 @@ class WindowsVistaThemeFix(mobase.IPlugin):
             print("Windows Vista Theme Fix: QApplication is not available.")
             return False
 
-        self.timer = QTimer(self.application)
-        self.timer.setInterval(500)
-        self.timer.timeout.connect(self.refresh_buttons)
         organizer.onUserInterfaceInitialized(self.start)
         return True
 
@@ -47,7 +47,6 @@ class WindowsVistaThemeFix(mobase.IPlugin):
         self.event_filter = CommandLinkFilter(self)
         self.application.installEventFilter(self.event_filter)
         self.refresh_buttons()
-        self.timer.start()
 
     def update_button(self, button):
         palette = button.palette()
