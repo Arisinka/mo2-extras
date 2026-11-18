@@ -25,3 +25,13 @@ It works with both dark and light themes, without any special QSS rules. The res
 **Installation:** Copy `Windows11TitleBar.py` into MO2's `plugins` folder and restart MO2.
 
 ![Windows11TitleBar](https://github.com/Arisinka/mo2-extras/blob/main/src/Windows11TitleBar.gif)
+
+## Bulk Delete Downloads
+
+Select multiple downloads in MO2's Downloads tab, right-click and choose **Delete Selected Downloads...** to move their archives and adjacent `.meta` files to the Windows Recycle Bin after confirmation. The confirmation shows up to ten file paths.
+
+The plugin accepts completed ZIP, RAR and 7Z archives inside the configured Downloads folder. If any selection fails validation, nothing is moved. Once deletion starts, individual failures are reported, some files may already have been moved. Windows may warn before permanently deleting a file if it cannot be recycled.
+
+**Installation:** Copy `BulkDeleteDownloads.py` into MO2's `plugins` folder and restart MO2.
+
+![BulkDeleteDownloads](https://github.com/Arisinka/mo2-extras/blob/main/src/BulkDeleteDownloads.gif)
